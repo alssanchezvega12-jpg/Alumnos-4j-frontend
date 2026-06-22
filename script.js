@@ -1,4 +1,4 @@
-const API_URL = "https://tu-backend-en-render.onrender.com/alumnos"; // Cambia por tu URL real
+const API_URL = "https://alumnos-4j.onrender.com/alumnos";
 
 // Registrar alumno
 document.getElementById("alumnoForm").addEventListener("submit", async (e) => {
@@ -35,7 +35,10 @@ async function cargarAlumnos() {
       <p>Edad: ${alumno.edad}</p>
       <p>Salón: ${alumno.salon}</p>
       ${alumno.foto ? `<img src="${alumno.foto}" alt="Foto">` : ""}
-      <button onclick="eliminarAlumno('${alumno._id}')">🗑️ Eliminar</button>
+      <div class="card-buttons">
+        <button onclick="editarAlumno('${alumno._id}')">✏️ Editar</button>
+        <button onclick="eliminarAlumno('${alumno._id}')">🗑️ Eliminar</button>
+      </div>
     `;
     lista.appendChild(card);
   });
@@ -49,6 +52,35 @@ async function eliminarAlumno(id) {
     cargarAlumnos();
   } else {
     alert("Error al eliminar alumno ❌");
+  }
+}
+
+// Editar alumno
+async function editarAlumno(id) {
+  const nombre = prompt("Nuevo nombre:");
+  const edad = prompt("Nueva edad:");
+  const salon = prompt("Nuevo salón:");
+
+  if (!nombre || !edad || !salon) {
+    alert("Todos los campos son obligatorios ❌");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("nombre", nombre);
+  formData.append("edad", edad);
+  formData.append("salon", salon);
+
+  const res = await fetch(`${API_URL}/${id}`, {
+    method: "PUT",
+    body: formData
+  });
+
+  if (res.ok) {
+    alert("Alumno actualizado ✏️✅");
+    cargarAlumnos();
+  } else {
+    alert("Error al actualizar alumno ❌");
   }
 }
 
