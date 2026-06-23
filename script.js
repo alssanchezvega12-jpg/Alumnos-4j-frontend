@@ -1,6 +1,6 @@
 const API_URL = "https://alumnos-4j.onrender.com/alumnos";
 
-// Registrar alumno
+// Registrar alumno (con foto)
 document.getElementById("alumnoForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const formData = new FormData(e.target);
@@ -24,6 +24,7 @@ document.getElementById("alumnoForm").addEventListener("submit", async (e) => {
 async function cargarAlumnos() {
   try {
     const res = await fetch(API_URL);
+    if (!res.ok) throw new Error("Error al cargar alumnos");
     const alumnos = await res.json();
 
     const lista = document.getElementById("listaAlumnos");
@@ -45,7 +46,7 @@ async function cargarAlumnos() {
       lista.appendChild(card);
     });
   } catch (err) {
-    console.error("Error al cargar alumnos:", err);
+    alert("❌ " + err.message);
   }
 }
 
@@ -62,7 +63,7 @@ async function eliminarAlumno(id) {
   }
 }
 
-// Editar alumno
+// Editar alumno (JSON en vez de FormData)
 async function editarAlumno(id) {
   const nombre = prompt("Nuevo nombre:");
   const edad = prompt("Nueva edad:");
@@ -73,15 +74,11 @@ async function editarAlumno(id) {
     return;
   }
 
-  const formData = new FormData();
-  formData.append("nombre", nombre);
-  formData.append("edad", edad);
-  formData.append("salon", salon);
-
   try {
     const res = await fetch(`${API_URL}/${id}`, {
       method: "PUT",
-      body: formData
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nombre, edad, salon })
     });
 
     if (!res.ok) throw new Error("Error al actualizar alumno");
