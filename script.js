@@ -1,6 +1,6 @@
 const API_URL = "https://alumnos-4j.onrender.com/alumnos";
 
-// Registrar alumno (con foto)
+// Registrar alumno
 document.getElementById("alumnoForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const formData = new FormData(e.target);
@@ -14,13 +14,15 @@ document.getElementById("alumnoForm").addEventListener("submit", async (e) => {
     if (!res.ok) throw new Error("Error al registrar alumno");
     alert("Alumno registrado con éxito 🎉");
     e.target.reset();
-    cargarAlumnos();
+    cargarAlumnos(); // refresca la lista automáticamente
   } catch (err) {
     alert("❌ " + err.message);
   }
 });
 
-// Cargar alumnos
+// Leer alumnos
+document.getElementById("btnLeer").addEventListener("click", cargarAlumnos);
+
 async function cargarAlumnos() {
   try {
     const res = await fetch(API_URL);
@@ -37,7 +39,7 @@ async function cargarAlumnos() {
         <h3>${alumno.nombre}</h3>
         <p>Edad: ${alumno.edad}</p>
         <p>Salón: ${alumno.salon}</p>
-        ${alumno.foto ? `<img src="${alumno.foto}" alt="Foto">` : `<img src="https://via.placeholder.com/150" alt="Foto">`}
+        <img src="${alumno.foto || "https://via.placeholder.com/150"}" alt="Foto">
         <div class="card-buttons">
           <button onclick="editarAlumno('${alumno._id}')">✏️ Editar</button>
           <button onclick="eliminarAlumno('${alumno._id}')">🗑️ Eliminar</button>
@@ -50,7 +52,7 @@ async function cargarAlumnos() {
   }
 }
 
-// Eliminar alumno
+// Eliminar alumno directamente
 async function eliminarAlumno(id) {
   if (!confirm("¿Seguro que deseas eliminar este alumno?")) return;
   try {
@@ -63,7 +65,7 @@ async function eliminarAlumno(id) {
   }
 }
 
-// Editar alumno (JSON en vez de FormData)
+// Editar alumno directamente
 async function editarAlumno(id) {
   const nombre = prompt("Nuevo nombre:");
   const edad = prompt("Nueva edad:");
@@ -89,19 +91,5 @@ async function editarAlumno(id) {
   }
 }
 
-
-document.getElementById("btnLeer").addEventListener("click", cargarAlumnos);
-
-document.getElementById("btnActualizar").addEventListener("click", () => {
-  const id = prompt("ID del alumno a actualizar:");
-  if (id) editarAlumno(id);
-});
-
-document.getElementById("btnEliminar").addEventListener("click", () => {
-  const id = prompt("ID del alumno a eliminar:");
-  if (id) eliminarAlumno(id);
-});
-
-
-// Inicializar
+// Inicializar lista al cargar la página
 cargarAlumnos();
