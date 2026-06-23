@@ -89,5 +89,19 @@ async function editarAlumno(id) {
   }
 }
 
+
+document.getElementById("btnLeer").addEventListener("click", cargarAlumnos);
+
+document.getElementById("btnActualizar").addEventListener("click", () => {
+  const id = prompt("ID del alumno a actualizar:");
+  if (id) editarAlumno(id);
+});
+
+document.getElementById("btnEliminar").addEventListener("click", () => {
+  const id = prompt("ID del alumno a eliminar:");
+  if (id) eliminarAlumno(id);
+});
+
+
 // Inicializar
 cargarAlumnos();

@@ -112,3 +112,23 @@ button[type="submit"]:hover {
 .card-buttons button:last-child:hover {
   background-color: #7b2cbf;
 }
+.crud-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.crud-buttons button {
+  background: #8a2be2;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.crud-buttons button:hover {
+  background: #6a0dad;
+}
